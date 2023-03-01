@@ -9,3 +9,11 @@ body,
 html.dark {
   background: #121212;
 }
+button, [type='button'], [type='reset'], [type='submit'] {
+    -webkit-appearance: button;
+    background-color: auto;
+    background-image: auto;
+}
+div{
+  box-sizing:border-box;
+}
