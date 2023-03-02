@@ -7,16 +7,14 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    ArithmeiticBoard: typeof import('./src/components/ArithmeiticBoard/index.vue')['default']
-    ArithmeticCard: typeof import('./src/components/ArithmeticCard/index.vue')['default']
     NGrid: typeof import('naive-ui')['NGrid']
     NGridItem: typeof import('naive-ui')['NGridItem']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SyArithmeiticBoard: typeof import('./src/components/SyArithmeiticBoard/index.vue')['default']
+    SyArithmeticBoard: typeof import('./src/components/SyArithmeticBoard/index.vue')['default']
     SyArithmeticCard: typeof import('./src/components/SyArithmeticCard/index.vue')['default']
-    SyInputBoard: typeof import('./src/components/ArithmeiticBoard/SyInputBoard.vue')['default']
-    SyInputCard: typeof import('./src/components/SyInputCard/index.vue')['default']
+    SyInputBoard: typeof import('./src/components/SyInputBoard.vue')['default']
     SyKeyboard: typeof import('./src/components/SyKeyboard.vue')['default']
     TheCounter: typeof import('./src/components/TheCounter.vue')['default']
     TheFooter: typeof import('./src/components/TheFooter.vue')['default']

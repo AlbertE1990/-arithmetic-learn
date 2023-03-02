@@ -1,19 +1,10 @@
 import type { Ref } from 'vue'
-import type { OperationalSymbolInter } from './types'
 
 export default class ArithmeticCard {
   public maxLen: number
   public character: Ref<string>
   public type: 'number' | 'symbol'
   public operationalSymbol?: string | undefined
-
-  static operationalSymbols: OperationalSymbolInter = {
-    ADD: '+',
-    SUB: '-',
-    MUL: '×',
-    DIV: '÷',
-    EQ: '=',
-  }
 
   constructor(character: string, maxLen = 1) {
     this.type = isNaN(Number(character)) ? 'symbol' : 'number'

@@ -3,8 +3,15 @@
 </script>
 
 <template>
-  <n-grid cols="2 400:4 600:6 " :x-gap="12" :y-gap="12">
-    <n-grid-item v-for="i in 12" :key="i">
+  <n-grid
+    cols="2 400:4 600:6 "
+    :x-gap="12"
+    :y-gap="12"
+  >
+    <n-grid-item
+      v-for="i in 12"
+      :key="i"
+    >
       <div class="bg-green-100 h-80px rounded flex items-center justify-center key ">
         {{ i - 1 }}
       </div>

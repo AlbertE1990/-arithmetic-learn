@@ -8,7 +8,7 @@ const name = $ref('')
 
 <template>
   <div class="relative h-full flex justify-center items-center">
-    <sy-arithmeitic-board />
+    <sy-arithmetic-board />
     <sy-keyboard class="absolute bottom-0 p-16px box-border" />
   </div>
 </template>

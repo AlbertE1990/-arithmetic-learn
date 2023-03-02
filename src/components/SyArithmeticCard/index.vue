@@ -1,38 +1,58 @@
-<script lang="ts" setup name="ArithmeiticBoard">
-import { onMounted, ref } from 'vue'
-import ArithmeticCard from './ArithmeticCard'
-import { OperationalSymbolInter } from './types'
+<script lang="ts" setup name="ArithmeticBoard">
+import { symbolMap } from '~/config/symbol'
 
-const props = withDefaults(defineProps<{
-  character: string
-  maxLen?: number
-}>(), {
-  maxLen: 1,
-})
-const emit = defineEmits<{
-  (e: 'update:character', payload: string): void
+const props = defineProps<{
+  modelValue: string | undefined
 }>()
 
-const type = isNaN(Number(props.character)) ? 'symbol' : 'number'
-const char = ref(props.character)
-const handleInput = (val: string) => {
-  char.value = val
-  emit('update:character', val)
+const emit = defineEmits<{
+  (e: 'update:modelValue', payload: string): void
+}>()
+
+const data = useVModel(props, 'modelValue', emit)
+const type = ref<'symbol' | 'number' | 'blank'>()
+const maxLen = ref(1)
+const operationalSymbol = ref()
+const editable = ref(false)
+const showText = ref('')
+function handleChar(char: string) {
+  const reg = /\?+/
+  if (!isNaN(Number(char))) {
+    type.value = 'number'
+    showText.value = char
+  }
+  else if (reg.test(char)) {
+    maxLen.value = char.length
+    type.value = 'blank'
+  }
+  else if (char in symbolMap) {
+    const _key = char as keyof typeof symbolMap
+    operationalSymbol.value = symbolMap[_key]
+    type.value = 'symbol'
+  }
 }
+onMounted(() => {
+  handleChar(props.modelValue)
+})
 </script>
 
 <template>
   <div
     v-if="type === 'symbol'"
     class="card symbol"
+    v-text="operationalSymbol"
+  />
+  <div
+    v-else-if="type === 'number'"
+    class="card number-car"
+    v-text="data"
   />
   <input
     v-else
+    v-model="data"
     class="card number-card"
     type="text"
     :maxlength="maxLen"
-    :value="char"
-    @input="handleInput(($event.target as HTMLInputElement).value)"
   >
 </template>
 
