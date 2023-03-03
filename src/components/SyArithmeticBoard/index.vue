@@ -1,72 +1,68 @@
 <script lang="ts" setup name="ArithmeticBoard">
 import { symbolMap } from '~/config/symbol'
+import { computeExpr } from '~/utils'
 
 interface CardOpt {
   type: 'number' | 'symbol' | 'blank'
-  showText?: string
+  modelValue?: string
   maxLen?: number
 }
-const expression = ['55', '*', '66', '=', '??']
-const expValue = ref<string[]>([])
+
+const props = defineProps<{
+  expression: (string | number)[]
+}>()
 
 const cardOptions = ref<CardOpt[]>()
 
-function handleChar(expression: string[]) {
+function handleChar(expression: (string | number)[]) {
   const reg = /\?+/
   cardOptions.value = expression.map((char, i) => {
     let type
     let maxLen
-    let showText
+    let modelValue
     if (!isNaN(Number(char))) {
       type = 'number'
-      showText = char
-      expValue.value[i] = char
+      modelValue = char
     }
-    else if (reg.test(char)) {
-      maxLen = char.length
+    else if (reg.test(char.toString())) {
+      maxLen = char.toString().length
       type = 'blank'
-      expValue.value[i] = ''
     }
     else if (char in symbolMap) {
       const _key = char as keyof typeof symbolMap
-      showText = symbolMap[_key]
+      modelValue = symbolMap[_key]
       type = 'symbol'
-      expValue.value[i] = char
     }
     return {
       type,
       maxLen,
-      showText,
+      modelValue,
     } as CardOpt
   })
 }
 
-handleChar(expression)
+const submit = () => {
+  const expr = cardOptions.value?.map(item => item.modelValue!)
+  console.log('expr--', expr)
+  return computeExpr(expr!)
+}
 
-onMounted(() => {
-  expression.forEach((i) => {
+watch(() => props.expression, (expr) => {
+  handleChar(expr)
+}, { immediate: true })
 
-  })
-})
+defineExpose({ submit })
 </script>
 
 <template>
   <div class="p-40px rounded shadow w-800px  bg-blue-gray-100 text-center">
     <div class="flex items-center justify-between">
-      <template
+      <SyArithmeticCard
         v-for="(opt, i) in cardOptions"
-        :key="opt.showText + i"
-      >
-        <SyArithmeticCard
-          v-if="opt.type === 'blank'"
-          v-model="expValue[i]"
-          :max-len="opt.maxLen"
-        />
-        <SyArithmeticCard
-          v-else
-          v-bind="opt"
-        />
-      </template>
+        :key="i"
+        v-bind="opt"
+        v-model="opt.modelValue"
+      />
     </div>
   </div>
 </template>

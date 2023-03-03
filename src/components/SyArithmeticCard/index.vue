@@ -1,8 +1,8 @@
 <script lang="ts" setup name="ArithmeticBoard">
-import { symbolMap } from '~/config/symbol'
-
 const props = defineProps<{
-  modelValue: string | undefined
+  modelValue?: string | number
+  type: 'number' | 'symbol' | 'blank'
+  maxLen?: number
 }>()
 
 const emit = defineEmits<{
@@ -10,42 +10,18 @@ const emit = defineEmits<{
 }>()
 
 const data = useVModel(props, 'modelValue', emit)
-const type = ref<'symbol' | 'number' | 'blank'>()
-const maxLen = ref(1)
-const operationalSymbol = ref()
-const editable = ref(false)
-const showText = ref('')
-function handleChar(char: string) {
-  const reg = /\?+/
-  if (!isNaN(Number(char))) {
-    type.value = 'number'
-    showText.value = char
-  }
-  else if (reg.test(char)) {
-    maxLen.value = char.length
-    type.value = 'blank'
-  }
-  else if (char in symbolMap) {
-    const _key = char as keyof typeof symbolMap
-    operationalSymbol.value = symbolMap[_key]
-    type.value = 'symbol'
-  }
-}
-onMounted(() => {
-  handleChar(props.modelValue)
-})
 </script>
 
 <template>
   <div
     v-if="type === 'symbol'"
     class="card symbol"
-    v-text="operationalSymbol"
+    v-text="modelValue"
   />
   <div
     v-else-if="type === 'number'"
-    class="card number-car"
-    v-text="data"
+    class="card number-card"
+    v-text="modelValue"
   />
   <input
     v-else
@@ -62,11 +38,14 @@ onMounted(() => {
   height: 140px;
   padding:20px;
   border-radius: 6px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   user-select: none;
   line-height: 80px;
   font-size: 60px;
   box-sizing: border-box;
+  text-align: center;
 }
 .number-card{
   background-color: aquamarine;
